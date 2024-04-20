@@ -1,3 +1,3 @@
 # TeXer 
 
-A [W.I.P.] LaTeX Editor made with Tkinter module, Python
+A basic LaTeX Editor made with Tkinter module, Python. Supported PdfTeX, PdfLaTeX, LuaTeX, XeTeX.

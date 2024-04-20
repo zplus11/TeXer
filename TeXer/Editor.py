@@ -7,7 +7,7 @@ from MenuBar import *
 from ToolBar import *
 
 
-class ScrollText(Frame):
+class Editor(Frame):
     def __init__(self, master, *args, **kwargs):
         Frame.__init__(self, *args, **kwargs)
         self.scrollbar = Scrollbar(self, orient = VERTICAL, command = self.onScroll)

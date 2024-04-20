@@ -4,11 +4,12 @@ from tkinter import font, colorchooser, filedialog, messagebox, scrolledtext
 
 import os
 
+
 class MenuBar(Menu):
-    url = ""
-    
     def __init__(self, master, text_widget, *args, **kwargs):
         Menu.__init__(self, master, *args, **kwargs)
+        self.url = ""
+        self.last_url = ""
         self.text_widget = text_widget
         self.master = master
         
@@ -33,33 +34,40 @@ class MenuBar(Menu):
         if self.text_widget.get(0.0, END) and messagebox.askyesno("Unsaved Changes", "Do you want to save changes before creating a new file?"):
             self.save_file()
         self.text_widget.delete(0.0, END)
+        self.url = ""
+        print("new file initiated")
         
     def open_file(self):
         global url
-        self.url = filedialog.askopenfilename(initialdir = os.getcwd, title = "Select File", filetypes = (("TeX Files", "tex"), ("Bib Files", "bib"), ("All Files", "*.*")))
+        self.url = filedialog.askopenfilename(initialdir = os.getcwd(), title = "Select File", filetypes = (("TeX Files", "tex"), ("Bib Files", "bib"), ("All Files", "*.*")))
         if self.url != "":
-            data = open(self.url, "r")
+            content = open(self.url, "r")
             self.text_widget.delete(0.0, END)
-            self.text_widget.insert(0.0, data.read())
+            self.text_widget.insert(0.0, content.read())
+            self.last_url = self.url
         self.master.title(self.url)
+        print("opened", self.url)
 
     def save_file(self):
-        if self.url == "":
-            save_url = filedialog.asksaveasfile(mode = "w", defaultextension = ".tex", filetypes = (("TeX Files", "tex"), ("Bib Files", "bib"), ("All Files", "*.*")))
-            if save_url != "":
-                content = self.text_widget.get(0.0, END)
-                save_url.write(content)
-                save_url.close()
+        if self.url == "" or self.last_url != self.url:
+            self.save_as_file()
         else:
             content = self.text_widget.get(0.0, END)
             file = open(self.url, "w")
             file.write(content)
+            self.master.title(self.url)
+            self.last_url = self.url
+            print("saved", self.url)
 
     def save_as_file(self):
-        save_url = filedialog.asksaveasfile(mode = "w", defaultextension = ".tex", filetypes = (("TeX Files", "tex"), ("Bib Files", "bib"), ("All Files", "*.*")))
-        content = self.text_widget.get(0.0, END)
-        save_url.write(content)
-        save_url.close()
+        self.url = filedialog.asksaveasfilename(defaultextension = ".tex", filetypes = (("TeX Files", "tex"), ("Bib Files", "bib"), ("All Files", "*.*")))
+        if self.url != "":
+            content = self.text_widget.get(0.0, END)
+            file = open(self.url, "w")
+            file.write(content)
+            self.master.title(self.url)
+            self.last_url = self.url
+            print("saved (as)", self.url)
 
     def on_new_file(self, event):
         self.new_file()
