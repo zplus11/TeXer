@@ -78,13 +78,14 @@ class ToolBar(Frame):
             except subprocess.CalledProcessError as e:
                 compiler_response = e.output
                 print("compiled", url, "with errors")
-                
-            compiler_window = Toplevel(self.master)
-            compiler_window.title("Compiler")
-            compiler_widget = scrolledtext.ScrolledText(compiler_window, wrap = WORD, width = 60, height = 20)
-            compiler_widget.insert(END, compiler_response)
-            compiler_widget.pack(expand = True, fill = "both")
-            compiler_widget.see(END)
+
+            finally:
+                compiler_window = Toplevel(self.master)
+                compiler_window.title("Compiler")
+                compiler_widget = scrolledtext.ScrolledText(compiler_window, wrap = WORD, width = 60, height = 20)
+                compiler_widget.insert(END, compiler_response)
+                compiler_widget.pack(expand = True, fill = "both")
+                compiler_widget.see(END)
  
     def set_compiler(self, event):
         global choice
